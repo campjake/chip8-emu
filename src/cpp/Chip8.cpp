@@ -2,17 +2,17 @@
 #include "../hpp/Chip8.hpp"
 
 struct Chip8::Impl {
-    uint8_t registers[16]{};                // Registers V0 - VF contain values ranging from 0x00 to 0xFF
-	uint8_t memory[4096]{};                 // 4096 bytes of memory, from 0x000 to 0xFFF
-	uint16_t index;                         // Stores memory addresses for use in operations.
-	uint16_t pc;                            // Contains the address of the next instruction to execute.
-	uint16_t stack[16]{};                   // Stack can hold 16 different PCs for function call nesting.
-	uint8_t sp;                             // Stack Pointer to track where in memory the CPU is executing.
-	uint8_t delayTimer;                     // Decrements at rate of cycle clock
-	uint8_t soundTimer;                     // Sounds when timer is non-zero
-	uint8_t keypad[16]{};                   // 16 hex values (0 through F)
-	uint32_t video[VIDEO_BUFFER_SIZE]{};    // Mem buffer for storing the graphics to display
-	uint16_t opcode;                        // Instructions to execute
+    uint8_t registers[16]{};                        // Registers V0 - VF contain values ranging from 0x00 to 0xFF
+	uint8_t memory[4096]{};                         // 4096 bytes of memory, from 0x000 to 0xFFF
+	uint16_t index;                                 // Stores memory addresses for use in operations.
+	uint16_t pc;                               // Contains the address of the next instruction to execute.
+	uint16_t stack[16]{};                           // Stack can hold 16 different PCs for function call nesting.
+	uint8_t sp;                                     // Stack Pointer to track where in memory the CPU is executing.
+	uint8_t delayTimer;                             // Decrements at rate of cycle clock
+	uint8_t soundTimer;                             // Sounds when timer is non-zero
+	uint8_t keypad[16]{};                           // 16 hex values (0 through F)
+	uint32_t video[Chip8::VIDEO_BUFFER_SIZE]{};    // Mem buffer for storing the graphics to display
+	uint16_t opcode;                                // Instructions to execute
     uint8_t fontset[Chip8::FONTSET_SIZE] = {
         0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
         0x20, 0x60, 0x20, 0x20, 0x70, // 1
@@ -96,6 +96,17 @@ void Chip8::LoadROM(const char* filename) {
     }
 }
 
+/**
+ * Reads the instruction that the PC is pointing at from memory
+ * Preconditions: Chip8::pc must contain a 2-byte instruction
+ * Postconditions: Returns a 16-bit instruction, then increments the PC by 2
+*/
+unsigned int Chip8::fetch() {
+    uint16_t instruction = pImpl->memory[pc++];             // 1 of 2 8-bit instructions
+    instruction = (instruction << 8 | pImpl->memory[pc++]); // 2 of 2 8-bit instructions
+
+    return instruction;
+}
 
 /** 00E0: CLS
  * Clears the display
@@ -116,3 +127,11 @@ void Chip8::OP_00EE() {
     pc = stack[sp];
 }
 
+/**
+ * 1nnn: Jump
+ * Preconditions    - N/A
+ * Postconditions   - pc = NNN
+*/
+void Chip8::OP_1nnn() {
+
+}

@@ -16,12 +16,13 @@ public:
     Chip8& operator=(Chip8&& rhs);
 
     void LoadROM(const char* filename);    // Loads instructions into memory
-
-   void OP_00E0();  // CLS
-   void OP_00EE();  // RET
-   void OP_1nnn();  // JP addr
-   void OP_2nnn();  // CALL addr
-   void OP_3xkk(const unsigned int Vx);  // SE Vx, byte
+    
+    unsigned int fetch();
+    void OP_00E0();  // CLS
+    void OP_00EE();  // RET
+    void OP_1nnn();  // JP addr
+    void OP_2nnn();  // CALL addr
+    void OP_3xkk(const unsigned int Vx);  // SE Vx, byte
 
 // Member Variables
     const static unsigned int START_ADDRESS = 0x200;
