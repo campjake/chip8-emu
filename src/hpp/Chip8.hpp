@@ -17,12 +17,15 @@ public:
 
     void LoadROM(const char* filename);    // Loads instructions into memory
     
-    unsigned int fetch();
+    void int fetch();
+    void decode(unsigned int instruction);
     void OP_00E0();  // CLS
     void OP_00EE();  // RET
-    void OP_1nnn();  // JP addr
+    void OP_1nnn();  // JP addr (Jump)
     void OP_2nnn();  // CALL addr
-    void OP_3xkk(const unsigned int Vx);  // SE Vx, byte
+    void OP_3xnn(const unsigned int Vx);  // SE Vx, byte
+    void OP_6xnn();  // Set VX to NN
+
 
 // Member Variables
     const static unsigned int START_ADDRESS = 0x200;

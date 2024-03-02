@@ -1,6 +1,13 @@
 #include <cstdint>
 #include "../hpp/Chip8.hpp"
 
+// Macro directive used to extract values from opcode in decode() fcn
+#define SECOND_NIBBLE       0xF00   // X
+#define THIRD_NIBBLE        0xF0    // Y
+#define FOURTH_NIBBLE       0xF     // N   
+#define SECOND_BYTE         0xFF00  // NN
+#define IMMEDIATE_ADDRESS   0xFFF   // NNN (2nd, 3rd, & 4th nibbles)
+
 struct Chip8::Impl {
     uint8_t registers[16]{};                        // Registers V0 - VF contain values ranging from 0x00 to 0xFF
 	uint8_t memory[4096]{};                         // 4096 bytes of memory, from 0x000 to 0xFFF
@@ -34,7 +41,14 @@ struct Chip8::Impl {
 
 };
 
-/** Default Constructor */
+/** 
+ * Default Constructor 
+ * Preconditions    : N/A
+ * Poscconditions   :   - pImpl and valid Impl,
+ *                      - RNG bounds and vals set
+ *                      - Program Counter points to valid START_ADDRESS
+ *                      - Loads fonts into memory
+*/
 Chip8::Chip8()
 :   pImpl(std::make_unique<Impl>()),
     randGen(std::chrono::system_clock::now().time_since_epoch().count()),
@@ -49,7 +63,11 @@ Chip8::Chip8()
 
 }
 
-/** Default Destructor */
+/** 
+ * Default Destructor 
+ * Preconditions    : N/A
+ * Postconditions   : N/A
+ * */
 Chip8::~Chip8() = default;
 
 /** Move Constructor*/
@@ -99,13 +117,21 @@ void Chip8::LoadROM(const char* filename) {
 /**
  * Reads the instruction that the PC is pointing at from memory
  * Preconditions: Chip8::pc must contain a 2-byte instruction
- * Postconditions: Returns a 16-bit instruction, then increments the PC by 2
+ * Postconditions: Stores the instruction in Impl.opcode, and increments pc by 2
 */
-unsigned int Chip8::fetch() {
-    uint16_t instruction = pImpl->memory[pc++];             // 1 of 2 8-bit instructions
-    instruction = (instruction << 8 | pImpl->memory[pc++]); // 2 of 2 8-bit instructions
+void Chip8::fetch() {
+    pImpl->opcode = pImpl->memory[pc++];    // 1 of 2 8-bit instructions
+    pImpl->opcode = (instruction << 8u |    // 2 of 2 8-bit instructions
+                    pImpl->memory[pc++]);   
+}
 
-    return instruction;
+/**
+ * Function: decode
+ * Preconditions    : Valid 16-bit instruction
+ * Postconditions   : Calls the instruction's corresponding op-code fcn
+*/
+void Chip8::decode(unsigned int instruction) {
+    #FIXME - needs a function pointer table!
 }
 
 /** 00E0: CLS
@@ -134,4 +160,13 @@ void Chip8::OP_00EE() {
 */
 void Chip8::OP_1nnn() {
 
+}
+
+/**
+ * 6xnn: Set register VX to NN
+ * Preconditions    - N/A
+ * Postconditions   - registers[VX] is set to NN
+*/
+void Chip8::OP_6xnn() {
+    uint8_t vX = (pImpl->opcode & )
 }
