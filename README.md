@@ -9,7 +9,7 @@ I'm attempting to implement my own version of CHIP-8 in C++ with smart pointers,
 The Pimpl does have overhead on operations that are running very frequently. To be specific, using a Pimpl, we have a layer of indirection whenever we access a member variable to dereference the pointer. However, CHIP-8 is not very demanding, and we often have to manually add some buffering time in there to run games at the intended speed. As a result, I see these as excellent learning opportunities for Modern C++ concepts without paying any design breaking consequences (for now).
 
 ## Anything else coming?
-Yep! I want to write a fully-fleshed out testing environment with Google Test, and build it with More Modern CMake techniques from CMake 3.14 and on.
+Yep! I want to write a fully-fleshed out testing environment with Google Test, and build it with More Modern CMake techniques from CMake 3.14 and on. As of right now, CHIP-8 resources online offer testing scripts that run lightweight programs, like printing the IBM logo to the screen. I think a Test-Driven Development version of this project could benefit a lot of new programmers to tackle this project since they will have a step-by-step process to incrementally make progress through this challenge.
 
 This README will also continue to get updated with lessons learned, key concepts I think you should know, and instructions on how to reproduce my program with CMake. Stay tuned!
 
