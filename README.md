@@ -4,7 +4,7 @@ Check out the guide [here](https://tobiasvl.github.io/blog/write-a-chip-8-emulat
 CHIP-8 was originally created as a way to make small programs and games in the late 70's and early 80's using hexadecimal instructions that were a layer of abstraction above machine code. The interpreter would run your program on the fly.
 
 ## What's Different from the other implementations?
-I'm attempting to implement my own version of CHIP-8 in C++ with smart pointers, and a [Pimpl](https://en.cppreference.com/w/cpp/language/pimpl). The overhead of using a `stad::unique_ptr` is very low since we are not using any custom deleters. 
+I'm attempting to implement my own version of CHIP-8 in C++ with smart pointers, and a [Pimpl](https://en.cppreference.com/w/cpp/language/pimpl). The overhead of using a `std::unique_ptr` is very low since we are not using any custom deleters. 
 
 The Pimpl does have overhead on operations that are running very frequently. To be specific, using a Pimpl, we have a layer of indirection whenever we access a member variable to dereference the pointer. However, CHIP-8 is not very demanding, and we often have to manually add some buffering time in there to run games at the intended speed. As a result, I see these as excellent learning opportunities for Modern C++ concepts without paying any design breaking consequences (for now).
 
